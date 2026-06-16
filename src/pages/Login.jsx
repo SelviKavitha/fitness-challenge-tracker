@@ -98,7 +98,7 @@ function Login() {
               placeholder="you@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-lg px-3 py-3 border border-gray-300 focus:outline-none text-sm focus:ring-2 focus:ring-orange-400"
+              className="w-full rounded-lg px-3 py-3 focus:outline-none text-sm focus:ring-2 focus:ring-orange-400"
             />
 
             {errors.email && (
@@ -120,7 +120,7 @@ function Login() {
               placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-lg px-3 py-3 border border-gray-300 focus:outline-none text-sm focus:ring-2 focus:ring-orange-400"
+              className="w-full rounded-lg px-3 py-3 focus:outline-none text-sm focus:ring-2 focus:ring-orange-400"
             />
 
             {errors.password && (
