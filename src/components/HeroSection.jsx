@@ -2,8 +2,8 @@ import { Link } from "react-router-dom";
 
 function HeroSection() {
   return (
-    <section className="bg-gradient-to-r from-orange-50 to-indigo-50">
-      <div className="max-w-7xl mx-auto px-6 py-20">
+    <section className="bg-gradient-to-r from-orange-50 to-indigo-50 relative overflow-hidden bg-gradient-to-br from-primary/10 via-background to-secondary/10 py-20 md:py-32">
+      <div className="container mx-auto px-4 md:px-20">
 
         <div className="grid md:grid-cols-2 gap-12 items-center">
 
@@ -48,7 +48,7 @@ function HeroSection() {
           {/* Right Image */}
           <div>
             <img
-              src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=900"
+              src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&auto=format&fit=crop"
               alt="Fitness"
               className="rounded-2xl shadow-lg w-full h-[400px] object-cover"
             />
