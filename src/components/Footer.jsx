@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { LuDumbbell } from "react-icons/lu";
 
 function Footer() {

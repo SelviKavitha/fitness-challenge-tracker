@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router";
 import { LuDumbbell } from "react-icons/lu";
 import { FcGoogle } from "react-icons/fc";
 import { FaApple } from "react-icons/fa";
@@ -9,43 +9,41 @@ function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const [errors, setErrors] = useState({
-    email: "",
-    password: "",
-  });
+  const [errors, setErrors] = useState({ email: "", password: "", });
 
   const handleLogin = (e) => {
     e.preventDefault();
-
     let newErrors = {};
-
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
     if (!email.trim()) {
       newErrors.email = "Email is required";
     } else if (!emailPattern.test(email)) {
       newErrors.email = "Enter a valid email";
     }
-
     if (!password.trim()) {
       newErrors.password = "Password is required";
     } else if (password.length < 6) {
       newErrors.password = "Password must be at least 6 characters";
     }
-
     setErrors(newErrors);
-
     if (Object.keys(newErrors).length > 0) return;
 
-    // Demo Login
-    if (email === "admin@gmail.com" && password === "admin123") {
+    const savedUser =
+      JSON.parse(localStorage.getItem("user")) || {};
+
+    if (
+      email === savedUser?.email &&
+      password === savedUser?.password
+    ) {
       localStorage.setItem("isLoggedIn", "true");
-      navigate("/home");
+      localStorage.setItem("username", savedUser.name);
+      navigate("/dashboard");
     } else {
       alert("Invalid Email or Password");
     }
-  };
+
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-orange-50 to-indigo-50 px-4 overflow-hidden">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-lg border border-gray-200 px-6 py-4">
@@ -54,17 +52,12 @@ function Login() {
             <LuDumbbell />
           </div>
         </div>
-
-        {/* Title */}
         <h1 className="text-2xl font-bold text-center text-slate-900 mt-4">
           Welcome Back
         </h1>
-
         <p className="text-center text-gray-500 text-sm mt-1">
           Sign in to continue your fitness journey
         </p>
-
-        {/* Social Login */}
         <div className="mt-4 space-y-3">
           <button className="w-full flex items-center justify-center gap-3 border border-gray-300 rounded-lg py-3 font-medium text-sm hover:bg-emerald-500 hover:text-white transition">
             <FcGoogle size={22} />
@@ -77,7 +70,7 @@ function Login() {
           </button>
         </div>
 
-        {/* Divider */}
+
         <div className="flex items-center my-4">
           <div className="flex-1 h-px bg-gray-300"></div>
 
@@ -88,8 +81,8 @@ function Login() {
           <div className="flex-1 h-px bg-gray-300"></div>
         </div>
 
-        {/* Form */}
-        <form className="space-y-3"  onSubmit={handleLogin}>
+
+        <form className="space-y-3" onSubmit={handleLogin}>
           <div>
             <label className="block text-sm font-medium mb-2">Email</label>
 
@@ -136,13 +129,12 @@ function Login() {
           </button>
         </form>
 
-        {/* Signup */}
+
         <p className="text-center text-sm text-gray-600 mt-6">
           Don't have an account?{" "}
           <Link
             to="/signup"
-            className="text-orange-500 font-semibold hover:underline"
-          >
+            className="text-orange-500 font-semibold hover:underline" >
             Sign Up
           </Link>
         </p>

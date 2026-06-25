@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router";
 import { LuDumbbell } from "react-icons/lu";
 import { FcGoogle } from "react-icons/fc";
 import { FaApple } from "react-icons/fa";
@@ -89,7 +89,7 @@ function Signup() {
 
   alert("Signup Successful");
 
-  navigate("/");
+  navigate("/login");
 };
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-orange-50 to-indigo-50 px-4 overflow-hidden">
