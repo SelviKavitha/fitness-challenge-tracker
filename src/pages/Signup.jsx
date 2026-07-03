@@ -3,6 +3,7 @@ import { LuDumbbell } from "react-icons/lu";
 import { FcGoogle } from "react-icons/fc";
 import { FaApple } from "react-icons/fa";
 import { useState } from "react";
+import { getUsers, registerUser } from "../services/authApi";
 
 function Signup() {
   const navigate = useNavigate();
@@ -17,80 +18,92 @@ function Signup() {
     confirmpassword:""
   });
 
- const handleSignup = (e) => {
-  e.preventDefault();
+ const handleSignup = async (e) => {
+    e.preventDefault();
 
-  let newErrors = {};
+    let newErrors = {};
 
-  const emailPattern =
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailPattern =
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  // Name Validation
-  if (!name.trim()) {
-    newErrors.name = "Name is required";
-  } else if (name.trim().length < 3) {
-    newErrors.name =
-      "Name must be at least 3 characters";
-  }
+    // Name
+    if (!name.trim()) {
+      newErrors.name = "Name is required";
+    } else if (name.trim().length < 3) {
+      newErrors.name =
+        "Name must be at least 3 characters";
+    }
 
-  // Email Validation
-  if (!email.trim()) {
-    newErrors.email = "Email is required";
-  } else if (!emailPattern.test(email)) {
-    newErrors.email = "Enter a valid email";
-  }
+    // Email
+    if (!email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!emailPattern.test(email)) {
+      newErrors.email = "Enter valid email";
+    }
 
-  // Password Validation
-  if (!password.trim()) {
-    newErrors.password = "Password is required";
-  } else if (password.length < 6) {
-    newErrors.password =
-      "Password must be at least 6 characters";
-  }
+    // Password
+    if (!password.trim()) {
+      newErrors.password =
+        "Password is required";
+    } else if (password.length < 6) {
+      newErrors.password =
+        "Password must be at least 6 characters";
+    }
 
-  // Confirm Password Validation
-  if (!confirmpassword.trim()) {
-    newErrors.confirmPassword =
-      "Confirm Password is required";
-  } else if (password !== confirmpassword) {
-    newErrors.confirmPassword =
-      "Passwords do not match";
-  }
+    // Confirm Password
+    if (!confirmpassword.trim()) {
+      newErrors.confirmpassword =
+        "Confirm Password is required";
+    } else if (password !== confirmpassword) {
+      newErrors.confirmpassword =
+        "Passwords do not match";
+    }
 
-  // Check Existing User
-  const existingUser = JSON.parse(
-    localStorage.getItem("user")
-  );
+    setErrors(newErrors);
 
-  if (
-    existingUser &&
-    existingUser.email === email
-  ) {
-    newErrors.email =
-      "Email already registered";
-  }
+    if (Object.keys(newErrors).length > 0)
+      return;
 
-  setErrors(newErrors);
+    try {
+      // Fetch all users
+      const users = await getUsers();
 
-  if (Object.keys(newErrors).length > 0)
-    return;
+      // Check email already exists
+      const userExists = users.find(
+        (user) =>
+          user.email.toLowerCase() ===
+          email.toLowerCase()
+      );
 
-  // Save User
-  const userData = {
-    name,
-    email,
-    password,
+      if (userExists) {
+        setErrors({
+          email: "Email already registered",
+        });
+        return;
+      }
+
+      // New User
+      const newUser = {
+        name,
+        email,
+        password,
+        favorites: [],
+        joinedChallenges: [],
+        progress: 0,
+      };
+
+      await registerUser(newUser);
+
+      alert("Signup Successful");
+
+      navigate("/login");
+    } catch (error) {
+      console.log(error);
+      alert("Something went wrong");
+    }
   };
 
-  localStorage.setItem(
-    "user",
-    JSON.stringify(userData)
-  );
 
-  alert("Signup Successful");
-
-  navigate("/login");
-};
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-orange-50 to-indigo-50 px-4 overflow-hidden">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-lg border border-gray-200 px-6 py-4">

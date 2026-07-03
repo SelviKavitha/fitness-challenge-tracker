@@ -1,15 +1,18 @@
-function JoinChallengeCard({
-  challenge,
-  onJoin,
-}) {
+function JoinChallengeCard({challenge,onJoin,isJoined,}) {
+  // console.log(onJoin, "Onjoin")
+  //   console.log(isJoined, "isJoined")
   return (
     <div className="bg-white border-2 border-orange-500 rounded-2xl p-6">
 
       <button
-        onClick={() => onJoin(challenge)}
-        className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-lg text-sm font-semibold transition"
-      >
-        Join Challenge
+        onClick={() => onJoin(challenge.challenge_id)}
+        disabled={isJoined}
+        className={`w-full py-3 rounded-lg text-sm font-semibold transition
+          ${isJoined
+            ? "bg-green-500 cursor-not-allowed text-white"
+            : "bg-orange-500 hover:bg-orange-600 text-white"
+          }`} >
+        {isJoined ? "Joined" : "Join Challenge"}
       </button>
 
       <div className="mt-6 space-y-4">
@@ -20,7 +23,7 @@ function JoinChallengeCard({
           </span>
 
           <span className="font-medium text-sm">
-            {challenge.startDate}: 03/01/2026
+            {challenge.startDate}{"03/13/2026"}
           </span>
         </div>
 
@@ -30,7 +33,7 @@ function JoinChallengeCard({
           </span>
 
           <span className="font-medium text-sm">
-            {challenge.endDate} : 04/12/2026
+            {challenge.endDate} {"05/13/2026"}
           </span>
         </div>
 

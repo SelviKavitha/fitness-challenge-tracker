@@ -78,6 +78,9 @@ import Dashboard from "./pages/Dashboard";
 import "./App.css";
 import BrowseChallenges from "./pages/BrowseChallenges";
 import ChallengeDetails from "./pages/ChallengeDetails";
+import MyChallenge from "./pages/MyChallenge";
+import Favorites from "./pages/Favorites";
+import MyActiveChallenge from "./components/MyActiveChallenge";
 
 const router = createBrowserRouter([
   {
@@ -104,6 +107,19 @@ const router = createBrowserRouter([
     path: "/challenge/:id",
     Component: ChallengeDetails,
   },
+  {
+    path: "/my-challenge/:id",
+    Component: MyChallenge,
+  },
+   {
+    path: "/favorites",
+    Component: Favorites,
+  },
+   {
+    path: "/active-challenges",
+    Component: MyActiveChallenge,
+  },
+  
 ]);
 
 function App() {

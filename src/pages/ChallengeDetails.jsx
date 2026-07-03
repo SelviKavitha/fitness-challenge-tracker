@@ -4,12 +4,16 @@ import Navbar from "../components/Navbar";
 import TabSection from "../components/TabSection";
 import { getChallengeById } from "../services/api";
 import JoinChallengeCard from "../components/JoinChallengeCard";
+import { FaUsers, FaRegCalendar, } from "react-icons/fa";
+import { FiTarget } from "react-icons/fi";
 
 function ChallengeDetail() {
   const { id } = useParams();
-
   const [challenge, setChallenge] = useState(null);
   const [activeTab, setActiveTab] = useState("overview");
+  const [currentUser, setCurrentUser] = useState(
+    JSON.parse(localStorage.getItem("currentUser"))
+  );
 
   useEffect(() => {
     getChallengeById(id).then((data) => {
@@ -57,11 +61,15 @@ function ChallengeDetail() {
 
   const activities = [
     {
+       avatar:
+        "https://randomuser.me/api/portraits/men/55.jpg",
       user: "runner_mike",
       text: "completed today's challenge 🔥",
       time: "2 hours ago",
     },
     {
+       avatar:
+        "https://randomuser.me/api/portraits/women/44.jpg",
       user: "yoga_emma",
       text: "reached a 15-day streak 🎉",
       time: "4 hours ago",
@@ -82,48 +90,41 @@ function ChallengeDetail() {
   }
 
 
-const handleJoin = (challenge) => {
-  const joined =
-    JSON.parse(
-      localStorage.getItem(
-        "joinedChallenges"
-      )
-    ) || [];
+  const handleJoin = (challengeId) => {
+    if (!currentUser) {
+      alert("Please login first.");
+      return;
+    }
 
-  const exists = joined.find(
-    (item) => item.id === challenge.id
-  );
+    let joined = currentUser.joinedChallenges || [];
 
-  if (!exists) {
-    joined.push(challenge);
+    if (joined.includes(challengeId)) {
+      alert("You have already joined this challenge.");
+      return;
+    }
 
-    localStorage.setItem(
-      "joinedChallenges",
-      JSON.stringify(joined)
+    joined.push(challengeId);
+
+    const updatedUser = {
+      ...currentUser,
+      joinedChallenges: joined,
+    };
+    localStorage.setItem("currentUser", JSON.stringify(updatedUser)
     );
-
-    alert("Challenge Joined!");
-  } else {
-    alert("Already Joined");
-  }
-};
+    setCurrentUser(updatedUser);
+    alert("Challenge Joined Successfully!");
+  };
+  const isJoined = (challengeId) => {
+    return currentUser?.joinedChallenges?.includes(challengeId);
+  };
 
   return (
     <>
       <Navbar />
-
       <div className="bg-slate-50 min-h-screen">
-
-        {/* Hero */}
-        <div
-          className="h-[420px] bg-cover bg-center relative"
-          style={{
-            backgroundImage: `url(${challenge.image})`,
-          }}
-        >
+        <div className="h-[420px] bg-cover bg-center relative" style={{ backgroundImage: `url(${challenge.avatar})`, }}>
           <div className="absolute inset-0 bg-black/50">
             <div className="container mx-auto px-4 py-8 md:px-20 h-full flex flex-col justify-end pb-10 text-white">
-
               <div className="flex gap-3 mb-4">
                 <span className="bg-purple-500 px-4 py-1 rounded-lg text-sm">
                   {challenge.category}
@@ -134,21 +135,24 @@ const handleJoin = (challenge) => {
                 </span>
               </div>
 
-              <h1 className="text-5xl md:text-6xl font-bold mb-4">
+              <h1 className="mb-3 text-4xl font-bold text-white md:text-5xl">
                 {challenge.title}
               </h1>
 
-              <div className="flex flex-wrap gap-8 text-lg">
-                <span>
-                  👥 {challenge.participants} participants
+              <div className="flex flex-wrap items-center gap-4 text-sm">
+                <span className="flex items-center gap-3 text-base">
+                  <FaUsers className="w-6 h-6" />
+                  {challenge.participants} participants
                 </span>
 
-                <span>
-                  📅 {challenge.duration}
+                <span className="flex items-center gap-3 text-base">
+                  <FaRegCalendar className="w-6 h-6" />
+                  {challenge.duration_days} Days
                 </span>
 
-                <span>
-                  🎯 {challenge.goal}
+                <span className="flex items-center gap-3 text-base">
+                  <FiTarget className="w-6 h-6" />
+                  {challenge.goal}
                 </span>
               </div>
 
@@ -160,7 +164,7 @@ const handleJoin = (challenge) => {
 
           <div className="grid lg:grid-cols-3 gap-8">
 
-            {/* LEFT */}
+
             <div className="lg:col-span-2">
 
               <TabSection
@@ -179,16 +183,15 @@ const handleJoin = (challenge) => {
                   },
                 ]}
                 activeTab={activeTab}
-                setActiveTab={setActiveTab}
-              />
+                setActiveTab={setActiveTab} />
 
-              {/* OVERVIEW */}
+
               {activeTab === "overview" && (
                 <div className="space-y-6">
 
-                  <div className="bg-white border rounded-2xl p-6">
+                  <div className="bg-white border-gray-300 border-1 rounded-xl p-4">
 
-                    <h2 className="text-2xl font-bold mb-5">
+                    <h2 className="text-xl font-medium mb-5">
                       About This Challenge
                     </h2>
 
@@ -197,27 +200,27 @@ const handleJoin = (challenge) => {
                     </p>
 
                     <div className="grid md:grid-cols-2 gap-4 mt-6">
+                      <div className="bg-gray-100 p-5 rounded-xl">
+                        <div className="flex items-center gap-2 mb-2">
+                          <FiTarget className="w-5 h-5 text-orange-500" />
+                          <h3 className="font-semibold">Challenge Goal</h3>
+                        </div>
 
-                      <div className="bg-gray-50 p-5 rounded-xl">
-                        <h3 className="font-semibold">
-                          Challenge Goal
-                        </h3>
-
-                        <p className="text-gray-500 mt-2">
+                        <p className="text-gray-500">
                           {challenge.goal}
                         </p>
                       </div>
 
-                      <div className="bg-gray-50 p-5 rounded-xl">
-                        <h3 className="font-semibold">
-                          Duration
-                        </h3>
+                      <div className="bg-gray-100 p-5 rounded-xl">
+                        <div className="flex items-center gap-2 mb-2">
+                          <FaRegCalendar className="w-5 h-5 text-orange-500" />
+                          <h3 className="font-semibold">Duration</h3>
+                        </div>
 
-                        <p className="text-gray-500 mt-2">
-                          {challenge.duration}
+                        <p className="text-gray-500">
+                          {challenge.duration_days} {"Days"}
                         </p>
                       </div>
-
                     </div>
 
                   </div>
@@ -264,11 +267,11 @@ const handleJoin = (challenge) => {
                 </div>
               )}
 
-              {/* LEADERBOARD */}
-              {activeTab === "leaderboard" && (
-                <div className="bg-white border rounded-2xl p-6">
 
-                  <h2 className="text-2xl font-bold mb-6">
+              {activeTab === "leaderboard" && (
+                <div className="bg-white border-gray-300 border-1 rounded-2xl p-6">
+
+                  <h2 className="text-xl font-medium mb-6">
                     Top Performers
                   </h2>
 
@@ -278,7 +281,7 @@ const handleJoin = (challenge) => {
                       (user, index) => (
                         <div
                           key={index}
-                          className="flex justify-between items-center border rounded-xl p-4"
+                          className="flex justify-between items-center border-gray-300 border-1 rounded-xl p-4"
                         >
                           <div className="flex items-center gap-4">
 
@@ -289,7 +292,7 @@ const handleJoin = (challenge) => {
                             <img
                               src={user.avatar}
                               alt={user.name}
-                              className="w-12 h-12 rounded-full"
+                              className="relative flex size-10 shrink-0 overflow-hidden rounded-full"
                             />
 
                             <div>
@@ -307,7 +310,7 @@ const handleJoin = (challenge) => {
                           </div>
 
                           <div className="text-right">
-                            <h3 className="text-2xl font-bold text-orange-500">
+                            <h3 className="text-xl font-bold text-orange-500">
                               {user.points}
                             </h3>
 
@@ -327,10 +330,10 @@ const handleJoin = (challenge) => {
 
               {/* ACTIVITY */}
               {activeTab === "activity" && (
-                <div className="bg-white border rounded-2xl p-6">
+                <div className="bg-white border-gray-300 border-1 rounded-2xl p-6">
 
                   <h2 className="text-2xl font-bold mb-6">
-                    Community Activity
+                    Recent Activity
                   </h2>
 
                   <div className="space-y-4">
@@ -341,13 +344,16 @@ const handleJoin = (challenge) => {
                           key={index}
                           className="border rounded-xl p-4"
                         >
-                          <h3 className="font-semibold">
-                            {activity.user}
+                           <img
+                              src={activity.avatar}
+                              alt={activity.name}
+                              className="relative flex size-10 shrink-0 overflow-hidden rounded-full"
+                            />
+                          <h3 className="font-medium text-gray-600">
+                            {activity.user}   {activity.text}
                           </h3>
 
-                          <p className="text-gray-600">
-                            {activity.text}
-                          </p>
+                        
 
                           <span className="text-sm text-gray-400">
                             {activity.time}
@@ -362,42 +368,9 @@ const handleJoin = (challenge) => {
               )}
             </div>
 
-            {/* RIGHT SIDEBAR */}
             <div className="space-y-6">
-
-              {/* <div className="bg-white border-2 border-orange-500 rounded-2xl p-6">
-
-                <button className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-lg font-semibold">
-                  Join Challenge
-                </button>
-
-                <div className="mt-6 space-y-4">
-
-                  <div className="flex justify-between">
-                    <span>Start Date</span>
-                    <strong>{challenge.startDate}</strong>
-                  </div>
-
-                  <div className="flex justify-between">
-                    <span>End Date</span>
-                    <strong>{challenge.endDate}</strong>
-                  </div>
-
-                  <div className="flex justify-between">
-                    <span>Difficulty</span>
-
-                    <span className="bg-orange-500 text-white px-3 py-1 rounded">
-                      {challenge.level}
-                    </span>
-                  </div>
-
-                </div>
-
-              </div> */}
-            <JoinChallengeCard
-  challenge={challenge}
-  onJoin={handleJoin}
-/>
+              <JoinChallengeCard challenge={challenge}
+                onJoin={handleJoin} isJoined={isJoined(challenge.challenge_id)} />
 
               <div className="bg-white border rounded-2xl p-6">
 

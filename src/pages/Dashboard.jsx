@@ -6,13 +6,17 @@ import {
   FaCalendarAlt,
   FaUsers,
 } from "react-icons/fa";
+import { Link } from "react-router";
+import MyActiveChallenge from "../components/MyActiveChallenge";
+import MyChallenge from "./MyChallenge";
 
 function Dashboard() {
   const savedUser = JSON.parse(
     localStorage.getItem("user")
   );
+  const username = localStorage.getItem("username") || "Sarah"
 
-  const username = savedUser?.name || "Sarah";
+  const userName = savedUser?.name || "Sarah";
 
   const [challenges] = useState([
     {
@@ -74,10 +78,9 @@ function Dashboard() {
   ];
 
   const addFavorite = (challenge) => {
-    const favorites =
-      JSON.parse(
-        localStorage.getItem("favorites")
-      ) || [];
+    const favorites = JSON.parse(
+      localStorage.getItem("favorites")
+    ) || [];
 
     const exists = favorites.find(
       (item) => item.id === challenge.id
@@ -112,8 +115,8 @@ function Dashboard() {
           <div className="bg-gradient-to-r from-orange-50 to-purple-50 border border-orange-200 rounded-2xl p-8 flex flex-col md:flex-row justify-between gap-6">
 
             <div>
-              <h1 className="text-4xl font-bold">
-                Welcome Back, {username} 👋
+              <h1 className="text-2xl font-bold">
+                Welcome Back, {username}!👋
               </h1>
 
               <p className="text-gray-600 mt-2">
@@ -124,10 +127,10 @@ function Dashboard() {
 
             <div className="flex gap-4">
 
-              <div className="bg-white rounded-xl p-5 shadow">
-                <div className="flex items-center gap-2">
-                  <FaFire className="text-orange-500 text-2xl" />
-                  <span className="text-3xl font-bold">
+              <div className="bg-white rounded-xl px-4 py-2 shadow">
+                <div className="flex items-center gap-2 rounded-lg bg-card ">
+                  <FaFire className="text-orange-500 text-xl" />
+                  <span className="text-xl font-bold">
                     14
                   </span>
                 </div>
@@ -137,10 +140,10 @@ function Dashboard() {
                 </p>
               </div>
 
-              <div className="bg-white rounded-xl p-5 shadow">
-                <div className="flex items-center gap-2">
-                  <FaTrophy className="text-green-500 text-2xl" />
-                  <span className="text-3xl font-bold">
+              <div className="bg-white rounded-xl px-4 py-2 shadow">
+                <div className="flex items-center gap-2 rounded-lg bg-card">
+                  <FaTrophy className="text-green-500 text-xl" />
+                  <span className="text-xl font-bold">
                     #47
                   </span>
                 </div>
@@ -164,80 +167,19 @@ function Dashboard() {
                   Active Challenges
                 </h2>
 
-                <button className="border px-4 py-2 rounded-lg hover:bg-gray-100">
+
+                <Link
+                  to="/active-challenges"
+                  className="border-1 border-gray-300 p-1.5 text-sm font-semibold rounded-lg hover:bg-emerald-400 hover:text-white"
+                >
                   Browse More
-                </button>
+                </Link>
               </div>
+              <MyChallenge />
 
-              <div className="grid md:grid-cols-2 gap-6">
 
-                {challenges.map((challenge) => (
-                  <div
-                    key={challenge.id}
-                    className="bg-white rounded-2xl shadow overflow-hidden"
-                  >
-                    <img
-                      src={challenge.image}
-                      alt={challenge.title}
-                      className="w-full h-56 object-cover"
-                    />
 
-                    <div className="p-5">
-
-                      <div className="flex gap-2 mb-3">
-                        <span className="bg-purple-500 text-white px-3 py-1 rounded text-xs">
-                          {challenge.category}
-                        </span>
-
-                        <span className="border px-3 py-1 rounded text-xs">
-                          {challenge.level}
-                        </span>
-                      </div>
-
-                      <h3 className="text-xl font-bold">
-                        {challenge.title}
-                      </h3>
-
-                      <div className="flex justify-between mt-4 text-sm">
-                        <span>Progress</span>
-                        <span>
-                          {challenge.progress}%
-                        </span>
-                      </div>
-
-                      <div className="w-full h-3 bg-gray-200 rounded-full mt-2">
-                        <div
-                          className="h-3 bg-orange-500 rounded-full"
-                          style={{
-                            width: `${challenge.progress}%`,
-                          }}
-                        ></div>
-                      </div>
-
-                      <p className="mt-4 flex items-center gap-2 text-gray-500">
-                        <FaUsers />
-                        {challenge.participants}
-                        Participants
-                      </p>
-
-                      <button
-                        onClick={() =>
-                          addFavorite(challenge)
-                        }
-                        className="mt-4 w-full border border-orange-500 text-orange-500 py-2 rounded-lg hover:bg-orange-50"
-                      >
-                        Save Challenge
-                      </button>
-
-                    </div>
-                  </div>
-                ))}
-
-              </div>
-
-              {/* Community Activity */}
               <div className="mt-10">
-
                 <h2 className="text-3xl font-bold mb-6">
                   Community Activity
                 </h2>

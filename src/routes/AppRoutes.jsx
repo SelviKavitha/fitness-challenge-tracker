@@ -6,7 +6,9 @@ import Signup from "../pages/Signup";
 import Dashboard from "../pages/Dashboard";
 import BrowseChallenges from "../pages/BrowseChallenges";
 import ChallengeDetails from "../pages/ChallengeDetails";
-// import Favorites from "../pages/Favorites";
+import MyChallenge from "../pages/MyChallenge";
+import Favorites from "../pages/Favorites";
+import MyActiveChallenge from "../components/MyActiveChallenge";
 // import NotFound from "../pages/NotFound";
 
 function AppRoutes() {
@@ -23,8 +25,10 @@ function AppRoutes() {
         <Route path="/browse" element={<BrowseChallenges/>} />
 
         <Route  path="/challenge/:id" element={<ChallengeDetails />} />
+         <Route  path="/my-challenge/:id" element={<MyChallenge/>} />
 
-      {/* <Route path="/favorites" element={<Favorites />} /> */}
+      <Route path="/favorites" element={<Favorites />} />
+       <Route path="/active-challenges" element={<MyActiveChallenge/>} />
 
       {/* <Route path="*" element={<NotFound />} /> */}
     </Routes>

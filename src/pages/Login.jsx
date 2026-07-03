@@ -3,6 +3,7 @@ import { LuDumbbell } from "react-icons/lu";
 import { FcGoogle } from "react-icons/fc";
 import { FaApple } from "react-icons/fa";
 import { useState } from "react";
+import { loginUser } from "../services/authApi";
 
 function Login() {
   const navigate = useNavigate();
@@ -11,39 +12,67 @@ function Login() {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({ email: "", password: "", });
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    let newErrors = {};
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!emailPattern.test(email)) {
-      newErrors.email = "Enter a valid email";
-    }
-    if (!password.trim()) {
-      newErrors.password = "Password is required";
-    } else if (password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters";
-    }
-    setErrors(newErrors);
-    if (Object.keys(newErrors).length > 0) return;
+const handleLogin = async (e) => {
+  e.preventDefault();
 
-    const savedUser =
-      JSON.parse(localStorage.getItem("user")) || {};
+  let newErrors = {};
 
-    if (
-      email === savedUser?.email &&
-      password === savedUser?.password
-    ) {
-      localStorage.setItem("isLoggedIn", "true");
-      localStorage.setItem("username", savedUser.name);
-      navigate("/dashboard");
-    } else {
-      alert("Invalid Email or Password");
-    }
+  const emailPattern =
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+  if (!email.trim()) {
+    newErrors.email = "Email is required";
+  } else if (!emailPattern.test(email)) {
+    newErrors.email = "Enter a valid email";
   }
 
+  if (!password.trim()) {
+    newErrors.password = "Password is required";
+  } else if (password.length < 6) {
+    newErrors.password =
+      "Password must be at least 6 characters";
+  }
+
+  setErrors(newErrors);
+
+  if (Object.keys(newErrors).length > 0)
+    return;
+
+  try {
+    const user = await loginUser(
+      email,
+      password
+    );
+
+    if (!user) {
+      alert("Invalid Email or Password");
+      return;
+    }
+
+    // Store logged in user
+    localStorage.setItem(
+      "currentUser",
+      JSON.stringify(user)
+    );
+
+    localStorage.setItem(
+      "isLoggedIn",
+      "true"
+    );
+
+    localStorage.setItem(
+      "username",
+      user.name
+    );
+
+    alert("Login Successful");
+
+    navigate("/dashboard");
+  } catch (error) {
+    console.log(error);
+    alert("Unable to login. Please try again.");
+  }
+};
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-orange-50 to-indigo-50 px-4 overflow-hidden">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-lg border border-gray-200 px-6 py-4">
