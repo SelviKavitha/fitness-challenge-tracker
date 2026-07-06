@@ -1,4 +1,4 @@
-function JoinChallengeCard({challenge,onJoin,isJoined,}) {
+function JoinChallengeCard({ challenge, onJoin, isJoined, }) {
   // console.log(onJoin, "Onjoin")
   //   console.log(isJoined, "isJoined")
   return (
@@ -6,13 +6,12 @@ function JoinChallengeCard({challenge,onJoin,isJoined,}) {
 
       <button
         onClick={() => onJoin(challenge.challenge_id)}
-        disabled={isJoined}
-        className={`w-full py-3 rounded-lg text-sm font-semibold transition
-          ${isJoined
-            ? "bg-green-500 cursor-not-allowed text-white"
+        className={`w-full py-3 rounded-lg text-sm font-semibold transition cursor-pointer  ${isJoined
+            ? "bg-red-500 hover:bg-red-600 text-white"
             : "bg-orange-500 hover:bg-orange-600 text-white"
-          }`} >
-        {isJoined ? "Joined" : "Join Challenge"}
+          }`}
+      >
+        {isJoined ? "Remove Challenge" : "Join Challenge"}
       </button>
 
       <div className="mt-6 space-y-4">

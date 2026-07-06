@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Navbar from "../components/Navbar";
 import { FaSearch, FaUsers, FaCalendarAlt, FaHeart, FaRegHeart } from "react-icons/fa";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import axios from 'axios';
 import { updateFavorites } from "../services/favoritesApi";
 import { FaMicrophone, FaMicrophoneSlash, } from "react-icons/fa";
@@ -95,7 +95,6 @@ function BrowseChallenges() {
       return;
     }
 
-    // Stop previous recognition if running
     if (recognitionRef.current) {
       recognitionRef.current.stop();
     }
@@ -103,7 +102,7 @@ function BrowseChallenges() {
     const recognition = new SpeechRecognition();
     recognitionRef.current = recognition;
 
-    recognition.lang = "en-IN"; // Better for Indian English
+    recognition.lang = "en-IN";
     recognition.continuous = false;
     recognition.interimResults = true;
     recognition.maxAlternatives = 1;
@@ -220,7 +219,7 @@ function BrowseChallenges() {
                     ? "🎤 Listening..."
                     : "Search challenges..."
                 }
-                className="w-full bg-white rounded-md pl-12 pr-14 py-3 focus:outline-none focus:ring-1 focus:ring-orange-400"
+                className="w-full bg-white rounded-md pl-12 pr-14 py-2 focus:outline-none focus:ring-1 focus:ring-orange-400"
               />
 
               <button
@@ -285,74 +284,114 @@ function BrowseChallenges() {
               ) : (
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-6">
                   {filteredChallenges.map((challenge) => (
-                    <div
+                    <Link
                       key={challenge.challenge_id}
-                      className="bg-white rounded-2xl overflow-hidden hover:shadow-lg transition flex flex-col justify-between"
+                      to={`/challenge/${challenge.challenge_id}`}
+                      className="block"
                     >
-                      <div>
-                        <img
-                          src={challenge.avatar}
-                          alt={challenge.title}
-                          className="w-full h-56 object-cover"
-                        />
+                      <div
+                        key={challenge.challenge_id}
+                        className="bg-white rounded-2xl overflow-hidden hover:shadow-lg transition flex flex-col justify-between"
+                      >
+                        <div>
+                          <img
+                            src={challenge.avatar}
+                            alt={challenge.title}
+                            className="w-full h-56 object-cover"
+                          />
 
 
-                        <div className="p-5">
-                          <div className="flex gap-2 mb-4">
-                            <span className="bg-purple-500 text-white text-xs px-3 py-1 rounded-md">
-                              {challenge.category}
-                            </span>
-                            <span
-                              className={`text-xs px-3 py-1 rounded-md text-white
+                          <div className="p-5">
+                            {/* <div className="flex gap-2 mb-4">
+                              <span className="bg-purple-500 text-white text-xs px-3 py-1 rounded-md">
+                                {challenge.category}
+                              </span>
+                              <span
+                                className={`text-xs px-3 py-1 rounded-md text-white
                                 ${challenge.level === "Beginner"
-                                  ? "bg-orange-500"
-                                  : challenge.level === "Intermediate"
-                                    ? "bg-blue-500"
-                                    : "bg-red-500"
-                                }`}
-                            >
-                              {challenge.level}
-                            </span>
-                            <button
-                              onClick={() => addFavorite(challenge.challenge_id)}
-                              className="shadow-md flex items-center justify-end hover:scale-110 transition"
-                            >
-                              {isFavorite(challenge.challenge_id) ? (
-                                <FaHeart className="text-red-500 text-xl hover:scale-110 transition" />
-                              ) : (
-                                <FaRegHeart className="text-xl text-red-500 hover:scale-110 transition" />
-                              )}
-                            </button>
-                          </div>
+                                    ? "bg-orange-500"
+                                    : challenge.level === "Intermediate"
+                                      ? "bg-blue-500"
+                                      : "bg-red-500"
+                                  }`}
+                              >
+                                {challenge.level}
+                              </span>
+                              <button
+                                onClick={() => addFavorite(challenge.challenge_id)}
+                                className="shadow-md flex items-center justify-end hover:scale-110 transition"
+                              >
+                                {isFavorite(challenge.challenge_id) ? (
+                                  <FaHeart className="text-red-500 text-xl hover:scale-110 transition" />
+                                ) : (
+                                  <FaRegHeart className="text-xl text-red-500 hover:scale-110 transition" />
+                                )}
+                              </button>
+                            </div> */}
+                            <div className="flex items-center justify-between mb-4">
 
-                          <h3 className="text-2xl font-bold">{challenge.title}</h3>
-                          <p className="text-gray-500 mt-3 line-clamp-2">
-                            {challenge.description}
-                          </p>
+                              <div className="flex gap-2">
+                                <span className="bg-purple-500 text-white text-xs px-3 py-1 rounded-md">
+                                  {challenge.category}
+                                </span>
+
+                                <span
+                                  className={`text-xs px-3 py-1 rounded-md text-white ${challenge.level === "Beginner"
+                                    ? "bg-orange-500"
+                                    : challenge.level === "Intermediate"
+                                      ? "bg-blue-500"
+                                      : "bg-red-500"
+                                    }`}
+                                >
+                                  {challenge.level}
+                                </span>
+                              </div>
 
 
-                          <div className="mt-4 space-y-2">
-                            <p className="flex items-center gap-2 text-gray-500">
-                              <FaUsers />
-                              {(challenge.participants || 0).toLocaleString()} participants
+                              <button
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  addFavorite(challenge.challenge_id);
+                                }}
+                                className="flex items-center justify-center cursor-pointer"
+                              >
+                                {isFavorite(challenge.challenge_id) ? (
+                                  <FaHeart className="text-red-500 text-xl hover:scale-110 transition" />
+                                ) : (
+                                  <FaRegHeart className="text-red-500 text-xl hover:scale-110 transition" />
+                                )}
+                              </button>
+                            </div>
+
+                            <h3 className="text-2xl font-bold">{challenge.title}</h3>
+                            <p className="text-gray-500 mt-3 line-clamp-2">
+                              {challenge.description}
                             </p>
-                            <p className="flex items-center gap-2 text-gray-500">
-                              <FaCalendarAlt />
-                              {challenge.duration_days} Days
-                            </p>
+
+
+                            <div className="mt-4 space-y-2">
+                              <p className="flex items-center gap-2 text-gray-500">
+                                <FaUsers />
+                                {(challenge.participants || 0).toLocaleString()} participants
+                              </p>
+                              <p className="flex items-center gap-2 text-gray-500">
+                                <FaCalendarAlt />
+                                {challenge.duration_days} Days
+                              </p>
+                            </div>
                           </div>
                         </div>
-                      </div>
 
-                      <div className="px-5 pb-5">
-                        <button
-                          onClick={() => navigate(`/challenge/${challenge.challenge_id}`)}
-                          className="w-full bg-orange-500 text-white py-3 rounded-lg hover:bg-orange-600 transition"
-                        >
-                          View Challenge
-                        </button>
+                        <div className="px-5 pb-5">
+                          <button
+                            onClick={() => navigate(`/challenge/${challenge.challenge_id}`)}
+                            className="w-full cursor-pointer bg-orange-500 text-white py-3 rounded-lg hover:bg-orange-600 transition"
+                          >
+                            View Challenge
+                          </button>
+                        </div>
                       </div>
-                    </div>
+                    </Link>
                   ))}
                 </div>
               )}

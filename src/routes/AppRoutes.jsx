@@ -9,6 +9,7 @@ import ChallengeDetails from "../pages/ChallengeDetails";
 import MyChallenge from "../pages/MyChallenge";
 import Favorites from "../pages/Favorites";
 import MyActiveChallenge from "../components/MyActiveChallenge";
+import ChallengeProgress from "../pages/ChallengeProgress";
 // import NotFound from "../pages/NotFound";
 
 function AppRoutes() {
@@ -29,6 +30,7 @@ function AppRoutes() {
 
       <Route path="/favorites" element={<Favorites />} />
        <Route path="/active-challenges" element={<MyActiveChallenge/>} />
+        <Route path="/progress/:id" element={<ChallengeProgress/>} />
 
       {/* <Route path="*" element={<NotFound />} /> */}
     </Routes>

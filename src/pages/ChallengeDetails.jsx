@@ -6,6 +6,7 @@ import { getChallengeById } from "../services/api";
 import JoinChallengeCard from "../components/JoinChallengeCard";
 import { FaUsers, FaRegCalendar, } from "react-icons/fa";
 import { FiTarget } from "react-icons/fi";
+import ChallengeStats from "../components/ChallengeStats";
 
 function ChallengeDetail() {
   const { id } = useParams();
@@ -61,20 +62,22 @@ function ChallengeDetail() {
 
   const activities = [
     {
-       avatar:
+      avatar:
         "https://randomuser.me/api/portraits/men/55.jpg",
       user: "runner_mike",
       text: "completed today's challenge 🔥",
       time: "2 hours ago",
     },
     {
-       avatar:
+      avatar:
         "https://randomuser.me/api/portraits/women/44.jpg",
       user: "yoga_emma",
       text: "reached a 15-day streak 🎉",
       time: "4 hours ago",
     },
     {
+      avatar:
+        "https://randomuser.me/api/portraits/men/11.jpg",
       user: "strong_alex",
       text: "joined this challenge",
       time: "6 hours ago",
@@ -89,34 +92,74 @@ function ChallengeDetail() {
     );
   }
 
+  const howItWorks = [
+    {
+      step: 1,
+      title: "Join the Challenge",
+      description: "Click the join button to get started",
+    },
+    {
+      step: 2,
+      title: "Track Your Progress",
+      description: "Log your daily activities and watch your progress grow",
+    },
+    {
+      step: 3,
+      title: "Complete and Celebrate",
+      description: "Reach your goal and earn achievements",
+    },
+  ];
 
-  const handleJoin = (challengeId) => {
-    if (!currentUser) {
-      alert("Please login first.");
-      return;
-    }
 
-    let joined = currentUser.joinedChallenges || [];
+ const handleJoin = (challengeId) => {
+  if (!currentUser) {
+    alert("Please login first.");
+    return;
+  }
 
-    if (joined.includes(challengeId)) {
-      alert("You have already joined this challenge.");
-      return;
-    }
+  let joined = [...(currentUser.joinedChallenges || [])];
 
+  if (joined.includes(challengeId)) {
+    // Remove challenge
+    joined = joined.filter((id) => id !== challengeId);
+
+    const updatedUser = {
+      ...currentUser,
+      joinedChallenges: joined,
+    };
+
+    localStorage.setItem(
+      "currentUser",
+      JSON.stringify(updatedUser)
+    );
+
+    setCurrentUser(updatedUser);
+
+    alert("Challenge Removed Successfully!");
+  } else {
+    // Join challenge
     joined.push(challengeId);
 
     const updatedUser = {
       ...currentUser,
       joinedChallenges: joined,
     };
-    localStorage.setItem("currentUser", JSON.stringify(updatedUser)
+
+    localStorage.setItem(
+      "currentUser",
+      JSON.stringify(updatedUser)
     );
+
     setCurrentUser(updatedUser);
+
     alert("Challenge Joined Successfully!");
-  };
-  const isJoined = (challengeId) => {
-    return currentUser?.joinedChallenges?.includes(challengeId);
-  };
+  }
+};
+  // const isJoined = (challengeId) => {
+  //   return currentUser?.joinedChallenges?.includes(challengeId);
+  // };
+  const isJoined =
+  currentUser?.joinedChallenges?.includes(challenge.challenge_id);
 
   return (
     <>
@@ -225,43 +268,30 @@ function ChallengeDetail() {
 
                   </div>
 
-                  <div className="bg-white border rounded-2xl p-6">
-
-                    <h2 className="text-2xl font-bold mb-6">
+                  <div className="bg-white border border-gray-200 rounded-2xl p-6 md:p-8 shadow-sm">
+                    <h2 className="text-md md:text-md font-medium mb-8">
                       How It Works
                     </h2>
 
-                    <div className="space-y-5">
+                    <div className="space-y-6">
+                      {howItWorks.map((item) => (
+                        <div key={item.step} className="flex items-start gap-4">
+                          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-orange-500 text-white font-bold text-lg shrink-0">
+                            {item.step}
+                          </div>
 
-                      <div>
-                        <h3 className="font-semibold">
-                          1. Join the Challenge
-                        </h3>
-                        <p className="text-gray-500">
-                          Click Join Challenge to start.
-                        </p>
-                      </div>
+                          <div>
+                            <h3 className="text-md md:text-md font-semibold">
+                              {item.title}
+                            </h3>
 
-                      <div>
-                        <h3 className="font-semibold">
-                          2. Track Your Progress
-                        </h3>
-                        <p className="text-gray-500">
-                          Log activities every day.
-                        </p>
-                      </div>
-
-                      <div>
-                        <h3 className="font-semibold">
-                          3. Complete and Celebrate
-                        </h3>
-                        <p className="text-gray-500">
-                          Earn badges and rewards.
-                        </p>
-                      </div>
-
+                            <p className="text-gray-500 text-sm mt-1">
+                              {item.description}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
                     </div>
-
                   </div>
 
                 </div>
@@ -332,35 +362,44 @@ function ChallengeDetail() {
               {activeTab === "activity" && (
                 <div className="bg-white border-gray-300 border-1 rounded-2xl p-6">
 
-                  <h2 className="text-2xl font-bold mb-6">
+                  <h2 className="text-md font-medium mb-6">
                     Recent Activity
                   </h2>
 
                   <div className="space-y-4">
 
-                    {activities.map(
-                      (activity, index) => (
-                        <div
-                          key={index}
-                          className="border rounded-xl p-4"
-                        >
-                           <img
-                              src={activity.avatar}
-                              alt={activity.name}
-                              className="relative flex size-10 shrink-0 overflow-hidden rounded-full"
-                            />
-                          <h3 className="font-medium text-gray-600">
-                            {activity.user}   {activity.text}
-                          </h3>
+                    {activities.map((activity, index) => (
+                      <div
+                        key={index}
+                        className="border border-gray-300 rounded-xl p-4"
+                      >
+                        <div className="flex items-start gap-3">
+                          {/* Avatar */}
+                          <img
+                            src={activity.avatar}
+                            alt={activity.user}
+                            className="w-10 h-10 rounded-full object-cover shrink-0"
+                          />
 
-                        
+                          {/* User Info */}
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2">
+                              <span className="font-semibold text-gray-800">
+                                {activity.user}
+                              </span>
+                              <span className="text-gray-500">
+                                {activity.text}
+                              </span>
+                            </div>
 
-                          <span className="text-sm text-gray-400">
-                            {activity.time}
-                          </span>
+                            {/* Time below the user */}
+                            <p className="text-sm text-gray-400 mt-1">
+                              {activity.time}
+                            </p>
+                          </div>
                         </div>
-                      )
-                    )}
+                      </div>
+                    ))}
 
                   </div>
 
@@ -369,51 +408,17 @@ function ChallengeDetail() {
             </div>
 
             <div className="space-y-6">
-              <JoinChallengeCard challenge={challenge}
-                onJoin={handleJoin} isJoined={isJoined(challenge.challenge_id)} />
+             
+              <JoinChallengeCard
+                challenge={challenge}
+                onJoin={handleJoin}
+                isJoined={isJoined}
+              />
+              <ChallengeStats />
 
-              <div className="bg-white border rounded-2xl p-6">
+              <div className="bg-white border-1 border-gray-300 rounded-2xl p-6">
 
-                <h3 className="font-bold text-xl mb-5">
-                  Challenge Stats
-                </h3>
-
-                <div className="space-y-5">
-
-                  <div>
-                    <h3 className="text-3xl font-bold">
-                      {challenge.participants}
-                    </h3>
-                    <p className="text-gray-500">
-                      Active Participants
-                    </p>
-                  </div>
-
-                  <div>
-                    <h3 className="text-3xl font-bold">
-                      {challenge.completionRate}
-                    </h3>
-                    <p className="text-gray-500">
-                      Completion Rate
-                    </p>
-                  </div>
-
-                  <div>
-                    <h3 className="text-3xl font-bold">
-                      {challenge.rating}
-                    </h3>
-                    <p className="text-gray-500">
-                      Average Rating
-                    </p>
-                  </div>
-
-                </div>
-
-              </div>
-
-              <div className="bg-white border rounded-2xl p-6">
-
-                <h3 className="font-bold text-xl mb-4">
+                <h3 className="font-medium text-md mb-4">
                   Top Participants
                 </h3>
 
@@ -424,8 +429,8 @@ function ChallengeDetail() {
                       <img
                         key={index}
                         src={user.avatar}
-                        alt=""
-                        className="w-12 h-12 rounded-full border-2 border-white"
+                        alt="User Image"
+                        className="w-10 h-10 rounded-full border-2 border-white"
                       />
                     ))}
                 </div>

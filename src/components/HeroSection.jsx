@@ -39,9 +39,11 @@ function HeroSection() {
                 Get Started Free →
               </Link>
 
-              <button className="border border-gray-300 px-6 py-3 rounded-lg font-medium hover:bg-white">
+              <Link
+                to="/browse"
+                className="border border-gray-300 px-6 py-3 rounded-lg font-medium hover:bg-white">
                 Browse Challenges
-              </button>
+              </Link>
             </div>
 
           </div>

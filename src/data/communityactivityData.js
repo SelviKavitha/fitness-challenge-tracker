@@ -1,0 +1,42 @@
+export const communityActivityData = [
+  {
+    id: 1,
+    username: "runner_mike",
+    avatar: "https://randomuser.me/api/portraits/men/32.jpg",
+    message: "completed the 30-Day Morning Yoga challenge! 🎉",
+    time: "2 hours ago",
+    icon: "trophy",
+  },
+  {
+    id: 2,
+    username: "yoga_emma",
+    avatar: "https://randomuser.me/api/portraits/women/44.jpg",
+    message: "reached 50 miles in the Run 100 Miles challenge! 🏃",
+    time: "4 hours ago",
+    icon: "trending",
+  },
+  {
+    id: 3,
+    username: "strong_alex",
+    avatar: "https://randomuser.me/api/portraits/men/51.jpg",
+    message: "joined the Strength Training Bootcamp",
+    time: "6 hours ago",
+    icon: "heart",
+  },
+  {
+    id: 4,
+    username: "walker_lisa",
+    avatar: "https://randomuser.me/api/portraits/women/63.jpg",
+    message: "earned the 'Early Bird' badge for 7 consecutive morning check-ins! 🏆",
+    time: "8 hours ago",
+    icon: "heart",
+  },
+  {
+    id: 5,
+    username: "fitlife_sarah",
+    avatar: "https://randomuser.me/api/portraits/women/21.jpg",
+    message: "completed today's yoga session! Day 14 streak 🔥",
+    time: "10 hours ago",
+    icon: "trophy",
+  },
+];

@@ -81,6 +81,7 @@ import ChallengeDetails from "./pages/ChallengeDetails";
 import MyChallenge from "./pages/MyChallenge";
 import Favorites from "./pages/Favorites";
 import MyActiveChallenge from "./components/MyActiveChallenge";
+import ChallengeProgress from "./pages/ChallengeProgress";
 
 const router = createBrowserRouter([
   {
@@ -119,6 +120,11 @@ const router = createBrowserRouter([
     path: "/active-challenges",
     Component: MyActiveChallenge,
   },
+   {
+    path: "/progress/:id",
+    Component:ChallengeProgress,
+  },
+  
   
 ]);
 

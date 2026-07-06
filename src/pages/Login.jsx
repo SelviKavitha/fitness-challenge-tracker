@@ -152,7 +152,7 @@ const handleLogin = async (e) => {
 
           <button
             type="submit"
-            className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-lg font-semibold transition"
+            className="w-full cursor-pointer bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-lg font-semibold transition"
           >
             Sign In
           </button>
@@ -163,7 +163,7 @@ const handleLogin = async (e) => {
           Don't have an account?{" "}
           <Link
             to="/signup"
-            className="text-orange-500 font-semibold hover:underline" >
+            className="text-orange-500 font-semibold hover:underline cursor-pointer" >
             Sign Up
           </Link>
         </p>

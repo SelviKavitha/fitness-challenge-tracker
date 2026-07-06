@@ -54,7 +54,7 @@ function MyActiveChallenge() {
         <div className="flex justify-between items-center mb-8">
 
           <div>
-            <h1 className="text-4xl font-bold">
+            <h1 className="text-xl font-bold">
               My Active Challenges
             </h1>
 
@@ -66,7 +66,7 @@ function MyActiveChallenge() {
 
           <Link
             to="/browse"
-            className="bg-orange-500 hover:bg-orange-600 text-white px-5 py-3 rounded-lg transition"
+            className="bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium px-2 py-1 rounded transition"
           >
             Browse More
           </Link>
@@ -128,7 +128,7 @@ function MyActiveChallenge() {
 
             <Link
               to="/browse-challenges"
-              className="inline-block mt-8 bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-lg transition"
+              className="inline-block mt-8 bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium px-3 py-1 rounded transition"
             >
               Browse Challenges
             </Link>

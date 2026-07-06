@@ -40,7 +40,7 @@ function Favorites() {
 
       <div className="min-h-screen bg-slate-100">
 
-        <div className="container mx-auto px-6 py-8">
+        <div className="container mx-auto px-4 py-8 md:px-20">
 
           <h1 className="text-5xl font-bold">
             My Favorites
