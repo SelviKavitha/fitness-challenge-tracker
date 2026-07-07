@@ -1,13 +1,8 @@
-import {
-  createHashRouter, // <-- Changed this line
-  RouterProvider,
-} from "react-router"; // (or "react-router-dom")
-
+import {createHashRouter, RouterProvider,} from "react-router"; 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
-
 import "./App.css";
 import BrowseChallenges from "./pages/BrowseChallenges";
 import ChallengeDetails from "./pages/ChallengeDetails";
@@ -16,7 +11,7 @@ import Favorites from "./pages/Favorites";
 import MyActiveChallenge from "./components/MyActiveChallenge";
 import ChallengeProgress from "./pages/ChallengeProgress";
 
-// Changed createBrowserRouter to createHashRouter below
+
 const router = createHashRouter([
   {
     path: "/",

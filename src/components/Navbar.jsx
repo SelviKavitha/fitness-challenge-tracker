@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link, useLocation } from "react-router";
+import { HashLink } from "react-router-hash-link";
 import { LuDumbbell } from "react-icons/lu";
 import { HiMenu, HiX } from "react-icons/hi";
 
@@ -43,20 +44,21 @@ function Navbar() {
 
           {!isLoggedIn ? (
             <>
-              {location.pathname === "/" && (
-                <a
-                  href="#features"
-                  className="hover:text-orange-500 text-sm transition"
-                >
-                  Features
-                </a>
-              )}
-              <a
-                href="#how"
-                className="hover:text-orange-500 text-sm transition"
-              >
-                How It Works
-              </a>
+               <HashLink
+      smooth
+      to="/#features"
+      className="hover:text-orange-500 text-sm transition"
+    >
+      Features
+    </HashLink>
+
+    <HashLink
+      smooth
+      to="/#how"
+      className="hover:text-orange-500 text-sm transition"
+    >
+      How It Works
+    </HashLink>
 
               <Link
                 to="/login"
@@ -142,7 +144,7 @@ function Navbar() {
           )}
         </div>
 
-        {/* Mobile Menu Button */}
+
         <button
           onClick={() =>
             setMenuOpen(!menuOpen)
@@ -165,55 +167,31 @@ function Navbar() {
 
           {!isLoggedIn ? (
             <>
-              <a
-                href="#features"
-                onClick={() =>
-                  setMenuOpen(false)
-                }
-                className="block px-5 py-4 hover:bg-gray-100"
+              <HashLink
+                smooth
+                to="/#features"
+                className="hover:text-orange-500 text-sm transition"
               >
                 Features
-              </a>
+              </HashLink>
 
-              <a
-                href="#how"
-                onClick={() =>
-                  setMenuOpen(false)
-                }
-                className="block px-5 py-4 hover:bg-gray-100"
+              <HashLink
+                smooth
+                to="/#how"
+                className="hover:text-orange-500 text-sm transition"
               >
                 How It Works
-              </a>
-
-              <Link
-                to="/login"
-                onClick={() =>
-                  setMenuOpen(false)
-                }
-                className="block px-5 py-4 hover:bg-gray-100"
-              >
-                Sign In
-              </Link>
-
-              <Link
-                to="/signup"
-                onClick={() =>
-                  setMenuOpen(false)
-                }
-                className="block m-4 bg-orange-500 text-center text-white py-3 rounded-lg"
-              >
+              </HashLink>
+              <Link to="/signup" onClick={() => setMenuOpen(false)}
+                className="block m-4 bg-orange-500 text-center text-white py-3 rounded-lg">
                 Get Started
               </Link>
             </>
           ) : (
             <>
               <div className="flex items-center gap-3 p-5 border-b">
-
-                <img
-                  src="https://i.pravatar.cc/150?img=32"
-                  alt=""
-                  className="w-12 h-12 rounded-full border-2 border-orange-500"
-                />
+                <img src="https://i.pravatar.cc/150?img=32"
+                  alt="User Profile" className="w-12 h-12 rounded-full border-2 border-orange-500" />
 
                 <div>
                   <h4 className="font-semibold">
